@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration version="1.0.10.0">
+  <DisplayManager>
+    <SystemInitScript/>
+    <SystemStartScript/>
+  </DisplayManager>
+  <General>
+    <HarmonyPath path="../../../../../../../../microchip/harmony/v1_10"/>
+    <Processor name=""/>
+    <ForceOptimization flag="true"/>
+    <MergeStrategy flag="USER_ALL"/>
+  </General>
+  <Manifest>
+    <Files>
+      <File>
+        <Name>osal_impl_basic.h</Name>
+        <Path>Header Files/framework/osal/src</Path>
+      </File>
+      <File>
+        <Name>peripheral_common_32bit.h</Name>
+        <Path>Header Files/framework/peripheral</Path>
+      </File>
+      <File>
+        <Name>drv_tmr_mapping.h</Name>
+        <Path>Header Files/framework/driver/tmr</Path>
+      </File>
+      <File>
+        <Name>drv_tmr_variant_mapping.h</Name>
+        <Path>Header Files/framework/driver/tmr/src</Path>
+      </File>
+      <File>
+        <Name>driver_common.h</Name>
+        <Path>Header Files/framework/driver</Path>
+      </File>
+      <File>
+        <Name>drv_tmr.h</Name>
+        <Path>Header Files/framework/driver/tmr</Path>
+      </File>
+      <File>
+        <Name>sys_devcon.c</Name>
+        <Path>Source Files/framework/system/devcon/src</Path>
+      </File>
+      <File>
+        <Name>osal.h</Name>
+        <Path>Header Files/framework/osal</Path>
+      </File>
+      <File>
+        <Name>sys_ports.h</Name>
+        <Path>Header Files/framework/system/ports</Path>
+      </File>
+      <File>
+        <Name>driver.h</Name>
+        <Path>Header Files/framework/driver</Path>
+      </File>
+      <File>
+        <Name>peripheral_common.h</Name>
+        <Path>Header Files/framework/peripheral</Path>
+      </File>
+      <File>
+        <Name>sys_devcon_cache.h</Name>
+        <Path>Source Files/framework/system/devcon/src</Path>
+      </File>
+      <File>
+        <Name>sys_common.h</Name>
+        <Path>Header Files/framework/system/common</Path>
+      </File>
+      <File>
+        <Name>sys_buffer.h</Name>
+        <Path>Header Files/framework/system/common</Path>
+      </File>
+      <File>
+        <Name>sys_clk.h</Name>
+        <Path>Header Files/framework/system/clk</Path>
+      </File>
+      <File>
+        <Name>osal_impl_none.h</Name>
+        <Path>Header Files/framework/osal/src</Path>
+      </File>
+      <File>
+        <Name>sys_clk_mapping.h</Name>
+        <Path>Header Files/framework/system/clk</Path>
+      </File>
+      <File>
+        <Name>sys_devcon_cache_pic32mz.S</Name>
+        <Path>Source Files/framework/system/devcon/src</Path>
+      </File>
+      <File>
+        <Name>osal_definitions.h</Name>
+        <Path>Header Files/framework/osal</Path>
+      </File>
+      <File>
+        <Name>gfx_palette.h</Name>
+        <Path>Header Files/framework/gfx</Path>
+      </File>
+      <File>
+        <Name>sys_devcon.h</Name>
+        <Path>Header Files/framework/system/devcon</Path>
+      </File>
+      <File>
+        <Name>system.h</Name>
+        <Path>Header Files/framework/system</Path>
+      </File>
+      <File>
+        <Name>sys_debug.h</Name>
+        <Path>Header Files/framework/system/debug</Path>
+      </File>
+      <File>
+        <Name>sys_module.h</Name>
+        <Path>Header Files/framework/system/common</Path>
+      </File>
+      <File>
+        <Name>drv_oc.h</Name>
+        <Path>Header Files/framework/driver/oc</Path>
+      </File>
+      <File>
+        <Name>sys_devcon_pic32mz.c</Name>
+        <Path>Source Files/framework/system/devcon/src</Path>
+      </File>
+      <File>
+        <Name>sys_devcon_local.h</Name>
+        <Path>Header Files/framework/system/devcon/src</Path>
+      </File>
+      <File>
+        <Name>peripheral.h</Name>
+        <Path>Header Files/framework/peripheral</Path>
+      </File>
+      <File>
+        <Name>sys_queue.h</Name>
+        <Path>Header Files/framework/system/common</Path>
+      </File>
+    </Files>
+    <Templates>
+      <Template>
+        <Name>drv_oc_static.c</Name>
+        <Path>Source Files/app/system_config/IMUyPWM4/framework/driver/oc/src</Path>
+        <Checksum>10EBA55D5032D437C9C8BF046D6C0AA6</Checksum>
+        <ProjectFileChecksum>106301C0086933B679CEBD3E0BD4677D</ProjectFileChecksum>
+      </Template>
+      <Template>
+        <Name>sys_clk_static.c</Name>
+        <Path>Source Files/app/system_config/IMUyPWM4/framework/system/clk/src</Path>
+        <Checksum>4681B98AC85858FD3FFA130908EDA5D0</Checksum>
+      </Template>
+      <Template>
+        <Name>system_tasks.c</Name>
+        <Path>Source Files/app/system_config/IMUyPWM4</Path>
+        <Checksum>C2B461037F8E055DF5749EFF2923C2A9</Checksum>
+      </Template>
+      <Template>
+        <Name>system_definitions.h</Name>
+        <Path>Header Files/app/system_config/IMUyPWM4</Path>
+        <Checksum>99EAF99DDB977951A6F5F16DA2DAA214</Checksum>
+      </Template>
+      <Template>
+        <Name>main.c</Name>
+        <Path>Source Files/app</Path>
+      </Template>
+      <Template>
+        <Name>drv_tmr_static.c</Name>
+        <Path>Source Files/app/system_config/IMUyPWM4/framework/driver/tmr/src</Path>
+        <Checksum>001233BBC8E98D2F96E70C0B94FFED9F</Checksum>
+      </Template>
+      <Template>
+        <Name>system_interrupt.c</Name>
+        <Path>Source Files/app/system_config/IMUyPWM4</Path>
+        <Checksum>C934CFD980878E57EE336D976F540A07</Checksum>
+      </Template>
+      <Template>
+        <Name>system_exceptions.c</Name>
+        <Path>Source Files/app/system_config/IMUyPWM4</Path>
+        <Checksum>C111969CA43D6CEA1E9E33A6164E7AE0</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_oc_mapping.c</Name>
+        <Path>Source Files/app/system_config/IMUyPWM4/framework/driver/oc/src</Path>
+        <Checksum>37E47DA142875F6105BF31AC89D55255</Checksum>
+      </Template>
+      <Template>
+        <Name>sys_clk_static.h</Name>
+        <Path>Header Files/app/system_config/IMUyPWM4/framework/system/clk</Path>
+        <Checksum>B4BD59D8D7C4DA95DC5E3B57755FD352</Checksum>
+      </Template>
+      <Template>
+        <Name>app.c</Name>
+        <Path>Source Files/app</Path>
+      </Template>
+      <Template>
+        <Name>drv_tmr_mapping.c</Name>
+        <Path>Source Files/app/system_config/IMUyPWM4/framework/driver/tmr/src</Path>
+        <Checksum>314E75640CA6EE8232D80D0B0DC4F1D8</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_usart_static.h</Name>
+        <Path>Header Files/app/system_config/IMUyPWM4/framework/driver/usart</Path>
+        <Checksum>D7DEB7C41F1E91D0B9D0727439F58319</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_usart_static.c</Name>
+        <Path>Source Files/app/system_config/IMUyPWM4/framework/driver/usart/src</Path>
+        <Checksum>5063FA95CB42DEDB06D340A9A9E1D93F</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_usart_mapping.c</Name>
+        <Path>Source Files/app/system_config/IMUyPWM4/framework/driver/usart/src</Path>
+        <Checksum>002869649B60292E326331D179B9A36B</Checksum>
+      </Template>
+      <Template>
+        <Name>system_config.h</Name>
+        <Path>Header Files/app/system_config/IMUyPWM4</Path>
+        <Checksum>978C50AAB38F40B3CCCA4E8A3814DC4E</Checksum>
+      </Template>
+      <Template>
+        <Name>system_init.c</Name>
+        <Path>Source Files/app/system_config/IMUyPWM4</Path>
+        <Checksum>FC203DC391CDE3FA21391114C3233C12</Checksum>
+      </Template>
+      <Template>
+        <Name>app.h</Name>
+        <Path>Header Files/app</Path>
+      </Template>
+      <Template>
+        <Name>drv_usart_static_byte_model.c</Name>
+        <Path>Source Files/app/system_config/IMUyPWM4/framework/driver/usart/src</Path>
+        <Checksum>CA129658FBC80B636F0A5AD25E1CE2E8</Checksum>
+      </Template>
+      <Template>
+        <Name>sys_ports_static.c</Name>
+        <Path>Source Files/app/system_config/IMUyPWM4/framework/system/ports/src</Path>
+        <Checksum>FD0DBF559616ECDEA14C58AFA7C6D07B</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_oc_static.h</Name>
+        <Path>Header Files/app/system_config/IMUyPWM4/framework/driver/oc</Path>
+        <Checksum>4FF078ACA4859F0FD658B7C07EE88CDD</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_tmr_static.h</Name>
+        <Path>Header Files/app/system_config/IMUyPWM4/framework/driver/tmr</Path>
+        <Checksum>22C378D43823FC94013EBE13E1392AE3</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_usart_static_local.h</Name>
+        <Path>Header Files/app/system_config/IMUyPWM4/framework/driver/usart/src</Path>
+        <Checksum>62F7F49D6A443F111DA38971475472FD</Checksum>
+      </Template>
+    </Templates>
+    <CompilerItems>
+      <C32>
+        <Include value="C:/Users/ramiro/Google Drive/ITESM/Thirteen_Semester/Robotics_Project/uDrone/IMUyPWM6/firmware/src"/>
+        <Include value="C:/Users/ramiro/Google Drive/ITESM/Thirteen_Semester/Robotics_Project/uDrone/IMUyPWM6/firmware/src/system_config/IMUyPWM4"/>
+        <Include value="C:/Users/ramiro/Google Drive/ITESM/Thirteen_Semester/Robotics_Project/uDrone/IMUyPWM6/firmware/src/IMUyPWM4"/>
+        <Include value="C:/microchip/harmony/v1_10/framework"/>
+        <Include value="C:/Users/ramiro/Google Drive/ITESM/Thirteen_Semester/Robotics_Project/uDrone/IMUyPWM6/firmware/src/system_config/IMUyPWM4/framework"/>
+      </C32>
+    </CompilerItems>
+    <Libraries>
+      <Library value="../../../../../../../../../../microchip/harmony/v1_10/bin/framework/peripheral/PIC32MZ2048ECM100_peripherals.a"/>
+    </Libraries>
+  </Manifest>
+</configuration>
