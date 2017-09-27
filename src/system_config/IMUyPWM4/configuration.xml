@@ -246,11 +246,11 @@
     </Templates>
     <CompilerItems>
       <C32>
-        <Include value="C:/Users/ramiro/Google Drive/ITESM/Thirteen_Semester/Robotics_Project/uDrone/IMUyPWM6/firmware/src"/>
-        <Include value="C:/Users/ramiro/Google Drive/ITESM/Thirteen_Semester/Robotics_Project/uDrone/IMUyPWM6/firmware/src/system_config/IMUyPWM4"/>
-        <Include value="C:/Users/ramiro/Google Drive/ITESM/Thirteen_Semester/Robotics_Project/uDrone/IMUyPWM6/firmware/src/IMUyPWM4"/>
+        <Include value="C:/Users/ramiro/Documents/microDrone/firmware/src"/>
+        <Include value="C:/Users/ramiro/Documents/microDrone/firmware/src/system_config/IMUyPWM4"/>
+        <Include value="C:/Users/ramiro/Documents/microDrone/firmware/IMUyPWM4"/>
         <Include value="C:/microchip/harmony/v1_10/framework"/>
-        <Include value="C:/Users/ramiro/Google Drive/ITESM/Thirteen_Semester/Robotics_Project/uDrone/IMUyPWM6/firmware/src/system_config/IMUyPWM4/framework"/>
+        <Include value="C:/Users/ramiro/Documents/microDrone/firmware/src/system_config/IMUyPWM4/framework"/>
       </C32>
     </CompilerItems>
     <Libraries>

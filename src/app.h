@@ -86,19 +86,31 @@ extern "C" {
 
 typedef enum
 {
-	/* Application's state machine's initial state. */
-	APP_STATE_INIT=0,
-	APP_STATE_SERVICE_TASKS,
+  /* Application's state machine's initial state. */
+  APP_STATE_INIT=0,
+  APP_STATE_SERVICE_TASKS,
     APP_STATE_ENABLE_PILOT,
     APP_STATE_READ_IMU,
     APP_STATE_READ_WIFI,
     APP_STATE_MODULE_PWM,
 
-	/* TODO: Define states used by the application state machine. */
+  /* TODO: Define states used by the application state machine. */
 
 } APP_STATES;
 
+typedef enum {
+  WAIT_IMU_TX_START,
+  WAIT_EQUAL,
+  PARSE_VALUE
+} READ_IMU_STATES;
 
+typedef enum {
+  WAIT_CLIENT_TX_START,
+  GET_THROTTLE,
+  GET_YAW,
+  GET_PITCH,
+  GET_ROLL
+} READ_CLIENT_STATE;
 // *****************************************************************************
 /* Application Data
 
@@ -116,7 +128,8 @@ typedef struct
 {
     /* The application's current state */
     APP_STATES state;
-
+    READ_IMU_STATES readIMUState;
+    READ_CLIENT_STATE readClientState;
     /* TODO: Define any additional data used by the application. */
 
 } APP_DATA;
@@ -129,7 +142,7 @@ typedef struct
 // *****************************************************************************
 /* These routines are called by drivers when certain events occur.
 */
-	
+  
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Initialization and State Machine Functions
@@ -214,4 +227,3 @@ void APP_Tasks( void );
 /*******************************************************************************
  End of File
  */
-
