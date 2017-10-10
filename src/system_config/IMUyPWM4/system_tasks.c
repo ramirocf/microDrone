@@ -82,6 +82,9 @@ void SYS_Tasks ( void )
     DRV_USART_TasksTransmit(sysObj.drvUsart1);
     DRV_USART_TasksReceive(sysObj.drvUsart1);
     DRV_USART_TasksError (sysObj.drvUsart1);
+    DRV_USART_TasksTransmit(sysObj.drvUsart2);
+    DRV_USART_TasksReceive(sysObj.drvUsart2);
+    DRV_USART_TasksError (sysObj.drvUsart2);
 
     /* Maintain Middleware & Other Libraries */
 

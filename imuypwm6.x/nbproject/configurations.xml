@@ -37,58 +37,58 @@
       <logicalFolder name="f1" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="driver" projectFiles="true">
           <logicalFolder name="f1" displayName="oc" projectFiles="true">
-            <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/driver/oc/drv_oc.h</itemPath>
+            <itemPath>../../../../../../microchip/harmony/v1_10/framework/driver/oc/drv_oc.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f2" displayName="tmr" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/driver/tmr/src/drv_tmr_variant_mapping.h</itemPath>
+              <itemPath>../../../../../../microchip/harmony/v1_10/framework/driver/tmr/src/drv_tmr_variant_mapping.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/driver/tmr/drv_tmr.h</itemPath>
-            <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/driver/tmr/drv_tmr_mapping.h</itemPath>
+            <itemPath>../../../../../../microchip/harmony/v1_10/framework/driver/tmr/drv_tmr.h</itemPath>
+            <itemPath>../../../../../../microchip/harmony/v1_10/framework/driver/tmr/drv_tmr_mapping.h</itemPath>
           </logicalFolder>
-          <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/driver/driver.h</itemPath>
-          <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/driver/driver_common.h</itemPath>
+          <itemPath>../../../../../../microchip/harmony/v1_10/framework/driver/driver.h</itemPath>
+          <itemPath>../../../../../../microchip/harmony/v1_10/framework/driver/driver_common.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f2" displayName="gfx" projectFiles="true">
-          <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/gfx/gfx_palette.h</itemPath>
+          <itemPath>../../../../../../microchip/harmony/v1_10/framework/gfx/gfx_palette.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f3" displayName="osal" projectFiles="true">
           <logicalFolder name="f1" displayName="src" projectFiles="true">
-            <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/osal/src/osal_impl_basic.h</itemPath>
-            <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/osal/src/osal_impl_none.h</itemPath>
+            <itemPath>../../../../../../microchip/harmony/v1_10/framework/osal/src/osal_impl_basic.h</itemPath>
+            <itemPath>../../../../../../microchip/harmony/v1_10/framework/osal/src/osal_impl_none.h</itemPath>
           </logicalFolder>
-          <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/osal/osal.h</itemPath>
-          <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/osal/osal_definitions.h</itemPath>
+          <itemPath>../../../../../../microchip/harmony/v1_10/framework/osal/osal.h</itemPath>
+          <itemPath>../../../../../../microchip/harmony/v1_10/framework/osal/osal_definitions.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f4" displayName="peripheral" projectFiles="true">
-          <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/peripheral/peripheral.h</itemPath>
-          <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/peripheral/peripheral_common.h</itemPath>
-          <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/peripheral/peripheral_common_32bit.h</itemPath>
+          <itemPath>../../../../../../microchip/harmony/v1_10/framework/peripheral/peripheral.h</itemPath>
+          <itemPath>../../../../../../microchip/harmony/v1_10/framework/peripheral/peripheral_common.h</itemPath>
+          <itemPath>../../../../../../microchip/harmony/v1_10/framework/peripheral/peripheral_common_32bit.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f5" displayName="system" projectFiles="true">
           <logicalFolder name="f1" displayName="clk" projectFiles="true">
-            <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/clk/sys_clk.h</itemPath>
-            <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/clk/sys_clk_mapping.h</itemPath>
+            <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/clk/sys_clk.h</itemPath>
+            <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/clk/sys_clk_mapping.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f2" displayName="common" projectFiles="true">
-            <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/common/sys_common.h</itemPath>
-            <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/common/sys_module.h</itemPath>
-            <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/common/sys_buffer.h</itemPath>
-            <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/common/sys_queue.h</itemPath>
+            <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/common/sys_common.h</itemPath>
+            <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/common/sys_module.h</itemPath>
+            <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/common/sys_buffer.h</itemPath>
+            <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/common/sys_queue.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f3" displayName="debug" projectFiles="true">
-            <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/debug/sys_debug.h</itemPath>
+            <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/debug/sys_debug.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f4" displayName="devcon" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/devcon/src/sys_devcon_local.h</itemPath>
+              <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/devcon/src/sys_devcon_local.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/devcon/sys_devcon.h</itemPath>
+            <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/devcon/sys_devcon.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f5" displayName="ports" projectFiles="true">
-            <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/ports/sys_ports.h</itemPath>
+            <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/ports/sys_ports.h</itemPath>
           </logicalFolder>
-          <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/system.h</itemPath>
+          <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/system.h</itemPath>
         </logicalFolder>
       </logicalFolder>
     </logicalFolder>
@@ -150,10 +150,10 @@
         <logicalFolder name="f1" displayName="system" projectFiles="true">
           <logicalFolder name="f1" displayName="devcon" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/devcon/src/sys_devcon.c</itemPath>
-              <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/devcon/src/sys_devcon_pic32mz.c</itemPath>
-              <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/devcon/src/sys_devcon_cache_pic32mz.S</itemPath>
-              <itemPath>../../../../../../../../../../microchip/harmony/v1_10/framework/system/devcon/src/sys_devcon_cache.h</itemPath>
+              <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/devcon/src/sys_devcon.c</itemPath>
+              <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/devcon/src/sys_devcon_pic32mz.c</itemPath>
+              <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/devcon/src/sys_devcon_cache_pic32mz.S</itemPath>
+              <itemPath>../../../../../../microchip/harmony/v1_10/framework/system/devcon/src/sys_devcon_cache.h</itemPath>
             </logicalFolder>
           </logicalFolder>
         </logicalFolder>
@@ -188,7 +188,7 @@
       <compileType>
         <linkerTool>
           <linkerLibItems>
-            <linkerLibFileItem>../../../../../../../../../../microchip/harmony/v1_10/bin/framework/peripheral/PIC32MZ2048ECM100_peripherals.a</linkerLibFileItem>
+            <linkerLibFileItem>../../../../../../microchip/harmony/v1_10/bin/framework/peripheral/PIC32MZ2048ECM100_peripherals.a</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
         <archiverTool>
@@ -219,7 +219,7 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value="../src;../src/system_config/IMUyPWM4;../src/IMUyPWM4;../src/system_config/IMUyPWM4/framework;../../../../../../../../../../microchip/harmony/v1_10/framework"/>
+                  value="../../../../../../../../../../microchip/harmony/v1_10/framework;../src;../src/system_config/IMUyPWM4;../src/IMUyPWM4;../../../../../../microchip/harmony/v1_10/framework;../src/system_config/IMUyPWM4/framework"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>

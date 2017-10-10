@@ -458,6 +458,207 @@ DRV_USART_LINE_CONTROL_SET_RESULT DRV_USART1_LineControlSet(DRV_USART_LINE_CONTR
     return(DRV_USART_LINE_CONTROL_SET_SUCCESS);
 }
 
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Global Data
+// *****************************************************************************
+// *****************************************************************************
+
+/* This is the driver static object . */
+DRV_USART_OBJ  gDrvUSART2Obj ;
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Instance 2 static driver functions
+// *****************************************************************************
+// *****************************************************************************
+
+SYS_MODULE_OBJ DRV_USART2_Initialize(void)
+{
+    uint32_t clockSource;
+
+    /* Disable the USART module to configure it*/
+    PLIB_USART_Disable (USART_ID_2);
+
+    /* Initialize the USART based on configuration settings */
+    PLIB_USART_InitializeModeGeneral(USART_ID_2,
+            false,  /*Auto baud*/
+            false,  /*LoopBack mode*/
+            false,  /*Auto wakeup on start*/
+            false,  /*IRDA mode*/
+            false);  /*Stop In Idle mode*/
+
+    /* Set the line control mode */
+    PLIB_USART_LineControlModeSelect(USART_ID_2, DRV_USART_LINE_CONTROL_8NONE1);
+
+    /* We set the receive interrupt mode to receive an interrupt whenever FIFO
+       is not empty */
+    PLIB_USART_InitializeOperation(USART_ID_2,
+            USART_RECEIVE_FIFO_ONE_CHAR,
+            USART_TRANSMIT_FIFO_IDLE,
+            USART_ENABLE_TX_RX_USED);
+
+    /* Get the USART clock source value*/
+    clockSource = SYS_CLK_PeripheralFrequencyGet ( CLK_BUS_PERIPHERAL_2 );
+
+    /* Set the baud rate and enable the USART */
+    PLIB_USART_BaudSetAndEnable(USART_ID_2,
+            clockSource,
+            115200);  /*Desired Baud rate value*/
+
+    /* Return the driver instance value*/
+    return (SYS_MODULE_OBJ)DRV_USART_INDEX_2;
+}
+
+void  DRV_USART2_Deinitialize(void)
+{
+    /* Disable USART module */
+    PLIB_USART_Disable (USART_ID_2);
+
+}
+
+
+SYS_STATUS DRV_USART2_Status(void)
+{
+    /* Return the status as ready always */
+    return SYS_STATUS_READY;
+}
+
+DRV_HANDLE DRV_USART2_Open(const SYS_MODULE_INDEX index, const DRV_IO_INTENT ioIntent)
+{
+
+    /* Return the driver instance value*/
+    return ((DRV_HANDLE)DRV_USART_INDEX_2 );
+}
+
+void DRV_USART2_Close(void)
+{
+    return;
+}
+
+DRV_USART_CLIENT_STATUS DRV_USART2_ClientStatus(void)
+{
+    /* Return the status as ready always*/
+    return DRV_USART_CLIENT_STATUS_READY;
+}
+
+DRV_USART_TRANSFER_STATUS DRV_USART2_TransferStatus( void )
+{
+    DRV_USART_TRANSFER_STATUS result = 0;
+
+    /* Check if RX data available */
+    if(PLIB_USART_ReceiverDataIsAvailable(USART_ID_2))
+    {
+        result|= DRV_USART_TRANSFER_STATUS_RECEIVER_DATA_PRESENT;
+    }
+    else
+    {
+        result|= DRV_USART_TRANSFER_STATUS_RECEIVER_EMPTY;
+    }
+
+    /* Check if TX Buffer is empty */
+    if(PLIB_USART_TransmitterIsEmpty(USART_ID_2))
+    {
+        result|= DRV_USART_TRANSFER_STATUS_TRANSMIT_EMPTY;
+    }
+
+    /* Check if the TX buffer is full */
+    if(PLIB_USART_TransmitterBufferIsFull(USART_ID_2))
+    {
+        result|= DRV_USART_TRANSFER_STATUS_TRANSMIT_FULL;
+    }
+
+    return(result);
+}
+
+
+
+
+
+DRV_USART_BAUD_SET_RESULT DRV_USART2_BaudSet(uint32_t baud)
+{
+    uint32_t clockSource;
+    int32_t brgValueLow=0;
+    int32_t brgValueHigh=0;
+    DRV_USART_BAUD_SET_RESULT retVal = DRV_USART_BAUD_SET_SUCCESS;
+#if defined (PLIB_USART_ExistsModuleBusyStatus)
+    bool isEnabled = false;
+#endif
+
+    /* Get the USART clock source value*/
+    clockSource = SYS_CLK_PeripheralFrequencyGet ( CLK_BUS_PERIPHERAL_2 );
+
+    /* Calculate low and high baud values */
+    brgValueLow  = ( (clockSource/baud) >> 4 ) - 1;
+    brgValueHigh = ( (clockSource/baud) >> 2 ) - 1;
+
+#if defined (PLIB_USART_ExistsModuleBusyStatus)
+        isEnabled = PLIB_USART_ModuleIsBusy (USART_ID_2);
+        if (isEnabled)
+        {
+            PLIB_USART_Disable (USART_ID_2);
+            while (PLIB_USART_ModuleIsBusy (USART_ID_2));
+        }
+#endif
+
+    /* Check if the baud value can be set with high baud settings */
+    if ((brgValueHigh >= 0) && (brgValueHigh <= UINT16_MAX))
+    {
+        PLIB_USART_BaudRateHighEnable(USART_ID_2);
+        PLIB_USART_BaudRateHighSet(USART_ID_2,clockSource,baud);
+    }
+    
+    /* Check if the baud value can be set with low baud settings */
+    else if ((brgValueLow >= 0) && (brgValueLow <= UINT16_MAX))
+    {
+        PLIB_USART_BaudRateHighDisable(USART_ID_2);
+        PLIB_USART_BaudRateSet(USART_ID_2, clockSource, baud);
+    }
+    else
+    {
+            retVal = DRV_USART_BAUD_SET_ERROR;
+    }
+
+#if defined (PLIB_USART_ExistsModuleBusyStatus)
+    if (isEnabled)
+    {
+        PLIB_USART_Enable (USART_ID_2);
+    }
+#endif
+
+    return retVal;
+}
+
+
+DRV_USART_LINE_CONTROL_SET_RESULT DRV_USART2_LineControlSet(DRV_USART_LINE_CONTROL lineControlMode)
+{
+#if defined (PLIB_USART_ExistsModuleBusyStatus)
+    bool isEnabled = false;
+#endif
+#if defined (PLIB_USART_ExistsModuleBusyStatus)
+        isEnabled = PLIB_USART_ModuleIsBusy (USART_ID_2);
+        if (isEnabled)
+        {
+            PLIB_USART_Disable (USART_ID_2);
+            while (PLIB_USART_ModuleIsBusy (USART_ID_2));
+        }
+#endif
+
+    /* Set the Line Control Mode */
+    PLIB_USART_LineControlModeSelect(USART_ID_2, lineControlMode);
+    
+#if defined (PLIB_USART_ExistsModuleBusyStatus)
+        if (isEnabled)
+        {
+            PLIB_USART_Enable (USART_ID_2);
+        }
+#endif
+
+    /* Return success */
+    return(DRV_USART_LINE_CONTROL_SET_SUCCESS);
+}
+
 /*******************************************************************************
  End of File
 */

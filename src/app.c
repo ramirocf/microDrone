@@ -29,9 +29,6 @@ void readClient();
 void setMotors();
 
 void APP_Initialize ( void ){
-    /*while (delay <= 400){
-        delay++;
-    }*/
     DRV_TMR0_Start(); // Start timer 2
     DRV_OC0_Start (); // Start motor 1 PWM
     DRV_OC1_Start (); // Start motor 2 PWM
@@ -67,7 +64,7 @@ void APP_Tasks ( void ){
         
         case APP_STATE_MODULE_PWM:{
             setMotors();
-            appData.state = APP_STATE_READ_IMU; // Cambia el status de la máquina de estados leer la IMU
+            appData.state = APP_STATE_READ_IMU;
         }
         break;
         
@@ -82,15 +79,15 @@ void readIMU() {
     char readCode;
     switch (appData.readIMUState) {
         case WAIT_IMU_TX_START : 
-            if (DRV_USART1_ReceiverBufferIsEmpty) {
-                DRV_USART0_WriteByte('Y');
+            if (DRV_USART1_ReceiverBufferIsEmpty()) {
+                //DRV_USART0_WriteByte('Y');
             }
             else {
                 appData.readIMUState = WAIT_EQUAL;
             }
             break;
         case WAIT_EQUAL:
-            if (!DRV_USART1_ReceiverBufferIsEmpty) {
+            if (!DRV_USART1_ReceiverBufferIsEmpty()) {
                 readCode = DRV_USART1_ReadByte();
                 if (readCode == '=') {
                     appData.readIMUState = PARSE_VALUE;
@@ -133,6 +130,26 @@ bool parseValue() {
     }
     return retVal;
 }
+
+void sendClientData(){
+    char val[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
+    DRV_USART0_WriteByte('Y');
+    DRV_USART0_WriteByte('P');
+    DRV_USART0_WriteByte('R');
+    DRV_USART0_WriteByte('=');
+    int i,j;
+    for (i = 0; i < 3; i++){
+        itoa(val[i],TYPR_control[i],10);
+        for (j = 0; j < 3 && val[i][j] != '\0'; j++){
+            DRV_USART0_WriteByte(val[i][j]);
+        }
+        if (i < 2){
+            DRV_USART0_WriteByte(',');
+        }
+    }
+    DRV_USART0_WriteByte('\n');
+}
+
 /*
     This FSM expects an string in a format like this:
     "\n(valor de Throttle)(valor de Yaw)(valor de Pitch)(valor de Roll)"
@@ -141,7 +158,7 @@ void readClient() {
     char receiveCode;
     switch(appData.readClientState) {
         case WAIT_CLIENT_TX_START:
-            if (!DRV_USART0_ReceiverBufferIsEmpty) {
+            if (!DRV_USART0_ReceiverBufferIsEmpty()) {
                 receiveCode = DRV_USART0_ReadByte();
                 if (receiveCode == '\n'){
                     appData.readClientState = GET_THROTTLE;
@@ -149,13 +166,13 @@ void readClient() {
             }
             break;
         case GET_THROTTLE:
-            if (!DRV_USART0_ReceiverBufferIsEmpty) {
-                TYPR_control [Throttle] = DRV_USART0_ReadByte();
+            if (!DRV_USART0_ReceiverBufferIsEmpty()) {
+                TYPR_control[Throttle] = DRV_USART0_ReadByte();
                 appData.readClientState = GET_YAW;
             }
             break;
         case GET_YAW:
-            if (!DRV_USART0_ReceiverBufferIsEmpty) {
+            if (!DRV_USART0_ReceiverBufferIsEmpty()) {
                 TYPR_control[Yaw] = DRV_USART0_ReadByte();
                 appData.readClientState = GET_PITCH;
             }
@@ -170,6 +187,8 @@ void readClient() {
             if (!DRV_USART0_ReceiverBufferIsEmpty()) {
                 TYPR_control[Roll] = DRV_USART0_ReadByte();
                 appData.readClientState = WAIT_CLIENT_TX_START;
+                // Just for debugging
+                //sendClientData();
             }
             break;
         default :

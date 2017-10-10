@@ -134,7 +134,7 @@
         <Name>drv_oc_static.c</Name>
         <Path>Source Files/app/system_config/IMUyPWM4/framework/driver/oc/src</Path>
         <Checksum>10EBA55D5032D437C9C8BF046D6C0AA6</Checksum>
-        <ProjectFileChecksum>106301C0086933B679CEBD3E0BD4677D</ProjectFileChecksum>
+        <ProjectFileChecksum>A9B456D4ADD03296E1AF5C2040EF5B31</ProjectFileChecksum>
       </Template>
       <Template>
         <Name>sys_clk_static.c</Name>
@@ -144,12 +144,12 @@
       <Template>
         <Name>system_tasks.c</Name>
         <Path>Source Files/app/system_config/IMUyPWM4</Path>
-        <Checksum>C2B461037F8E055DF5749EFF2923C2A9</Checksum>
+        <Checksum>4446364E43E439203734A3AFA453FBBC</Checksum>
       </Template>
       <Template>
         <Name>system_definitions.h</Name>
         <Path>Header Files/app/system_config/IMUyPWM4</Path>
-        <Checksum>99EAF99DDB977951A6F5F16DA2DAA214</Checksum>
+        <Checksum>035343C188AB9C04E940D280889D0352</Checksum>
       </Template>
       <Template>
         <Name>main.c</Name>
@@ -192,27 +192,27 @@
       <Template>
         <Name>drv_usart_static.h</Name>
         <Path>Header Files/app/system_config/IMUyPWM4/framework/driver/usart</Path>
-        <Checksum>D7DEB7C41F1E91D0B9D0727439F58319</Checksum>
+        <Checksum>073CEE7231AADF24971B885650445B7B</Checksum>
       </Template>
       <Template>
         <Name>drv_usart_static.c</Name>
         <Path>Source Files/app/system_config/IMUyPWM4/framework/driver/usart/src</Path>
-        <Checksum>5063FA95CB42DEDB06D340A9A9E1D93F</Checksum>
+        <Checksum>7A31C701800C9D5EECB9241B022DBF0C</Checksum>
       </Template>
       <Template>
         <Name>drv_usart_mapping.c</Name>
         <Path>Source Files/app/system_config/IMUyPWM4/framework/driver/usart/src</Path>
-        <Checksum>002869649B60292E326331D179B9A36B</Checksum>
+        <Checksum>F4D74A763039441FF41442CBC3BA46C0</Checksum>
       </Template>
       <Template>
         <Name>system_config.h</Name>
         <Path>Header Files/app/system_config/IMUyPWM4</Path>
-        <Checksum>978C50AAB38F40B3CCCA4E8A3814DC4E</Checksum>
+        <Checksum>D8C812DEB6C181B43814A70859A06706</Checksum>
       </Template>
       <Template>
         <Name>system_init.c</Name>
         <Path>Source Files/app/system_config/IMUyPWM4</Path>
-        <Checksum>FC203DC391CDE3FA21391114C3233C12</Checksum>
+        <Checksum>9F21588E0E25A95D31A6028C5CC83838</Checksum>
       </Template>
       <Template>
         <Name>app.h</Name>
@@ -221,12 +221,12 @@
       <Template>
         <Name>drv_usart_static_byte_model.c</Name>
         <Path>Source Files/app/system_config/IMUyPWM4/framework/driver/usart/src</Path>
-        <Checksum>CA129658FBC80B636F0A5AD25E1CE2E8</Checksum>
+        <Checksum>336F9377EB573787D9ED7BC54208441F</Checksum>
       </Template>
       <Template>
         <Name>sys_ports_static.c</Name>
         <Path>Source Files/app/system_config/IMUyPWM4/framework/system/ports/src</Path>
-        <Checksum>FD0DBF559616ECDEA14C58AFA7C6D07B</Checksum>
+        <Checksum>587BE496D2C96B52F53AC7DD0ADA6889</Checksum>
       </Template>
       <Template>
         <Name>drv_oc_static.h</Name>
@@ -246,15 +246,15 @@
     </Templates>
     <CompilerItems>
       <C32>
-        <Include value="C:/Users/ramiro/Documents/microDrone/firmware/src"/>
-        <Include value="C:/Users/ramiro/Documents/microDrone/firmware/src/system_config/IMUyPWM4"/>
-        <Include value="C:/Users/ramiro/Documents/microDrone/firmware/IMUyPWM4"/>
-        <Include value="C:/microchip/harmony/v1_10/framework"/>
-        <Include value="C:/Users/ramiro/Documents/microDrone/firmware/src/system_config/IMUyPWM4/framework"/>
+        <Include value="C:\Users\ramiro\Documents\microDrone\firmware\src"/>
+        <Include value="C:\Users\ramiro\Documents\microDrone\firmware\src\system_config\IMUyPWM4"/>
+        <Include value="C:\Users\ramiro\Documents\microDrone\firmware\src\IMUyPWM4"/>
+        <Include value="C:\microchip\harmony\v1_10\framework"/>
+        <Include value="C:\Users\ramiro\Documents\microDrone\firmware\src\system_config\IMUyPWM4\framework"/>
       </C32>
     </CompilerItems>
     <Libraries>
-      <Library value="../../../../../../../../../../microchip/harmony/v1_10/bin/framework/peripheral/PIC32MZ2048ECM100_peripherals.a"/>
+      <Library value="../../../../../../microchip/harmony/v1_10/bin/framework/peripheral/PIC32MZ2048ECM100_peripherals.a"/>
     </Libraries>
   </Manifest>
 </configuration>
