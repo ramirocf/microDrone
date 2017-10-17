@@ -10,7 +10,7 @@
 
 static unsigned int x = 0;
 static unsigned int y = 0;
-unsigned int TYPR_control [4] = {0, 0, 0, 0};
+unsigned int TYPR_control [11] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 unsigned int TYPR_PWM [4] = {0, 0, 0, 0};
 float TYPR_lecture [4] = {0, 0, 0, 0};
 float TYPR_target [4] = {0, 0, 0, 0};
@@ -21,7 +21,8 @@ unsigned char TYPR[4][8]={{'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'},
                           {'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'},
                           {'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'},
                           {'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'}};
-unsigned char readcode3 = 0;
+unsigned char readcode3 [4] = {'\0', '\0', '\0', '\0'};
+unsigned char readcode4 = 0;
 
 APP_DATA appData;
 
@@ -32,6 +33,7 @@ void setMotors();
 
 void APP_Initialize ( void ){
     DRV_TMR0_Start(); // Start timer 2
+    DRV_TMR1_Start();
     DRV_OC0_Start (); // Start motor 1 PWM
     DRV_OC1_Start (); // Start motor 2 PWM
     DRV_OC2_Start (); // Start motor 3 PWM
@@ -55,10 +57,10 @@ void APP_Tasks ( void ){
             while (DRV_USART0_ReceiverBufferIsEmpty()){
                 
             }
-            readcode3 = 0;
+            readcode4 = 0;
             while (!DRV_USART0_ReceiverBufferIsEmpty()){
-                readcode3 = DRV_USART0_ReadByte();
-                DRV_USART2_WriteByte(readcode3);
+                readcode4 = DRV_USART0_ReadByte();
+                DRV_USART2_WriteByte(readcode4);
             }
             
         }
@@ -207,24 +209,78 @@ void readClient() {
             appData.readClientState = WAIT_CLIENT_TX_START;
             break;    
     }*/
-    while (DRV_USART0_ReceiverBufferIsEmpty()){
-        
+    int i = 0;
+    for (i=0; i <= 3; i++){
+        readcode3[i] = '\0';
     }
-    readcode3 = 0;
+    
+    while (readcode3[0] != '#' && ((readcode3[1] != 'A' && readcode3[2] != 'P') || (readcode3[1] != 'R' && readcode3[2] != 'C')) && readcode3[3] != '='){
+        for (i=0; i <= 3; i++){
+            while (DRV_USART0_ReceiverBufferIsEmpty()){
+                
+            }
+            readcode3[i] = DRV_USART0_ReadByte();
+            DRV_USART2_WriteByte(readcode3[i]);
+        }
+    }
+        
+    
+    for (i = 0; i <= 10; i++){
+        while (DRV_USART0_ReceiverBufferIsEmpty()){
+            
+        }
+        TYPR_control[i] = DRV_USART0_ReadByte();
+        DRV_USART2_WriteByte(TYPR_control[i]);
+    }
+    /*readcode3[2] = 0;
     while (!DRV_USART0_ReceiverBufferIsEmpty()){
         readcode3 = DRV_USART0_ReadByte();
         DRV_USART2_WriteByte(readcode3);
-    }
-    appData.state = APP_STATE_READ_WIFI;
+    }*/
+    //appData.state = APP_STATE_READ_WIFI;
+    appData.state = APP_STATE_MODULE_PWM;
 }
 
 void setMotors() {
-    TYPR_PWM [Throttle] = TYPR_control [Throttle]*400/255;
-    TYPR_PWM [Yaw] = TYPR_control [Yaw]*400/255; 
-    TYPR_PWM [Pitch] = TYPR_control [Pitch]*400/255;
-    TYPR_PWM [Roll] = TYPR_control [Roll]*400/255;
-    DRV_OC0_PulseWidthSet(TYPR_PWM [Throttle]);
-    DRV_OC1_PulseWidthSet(TYPR_PWM [Yaw]); 
-    DRV_OC2_PulseWidthSet(TYPR_PWM [Pitch]);
-    DRV_OC3_PulseWidthSet(TYPR_PWM [Roll]); 
+    TYPR_PWM [Throttle] = TYPR_control [Throttle]*510/162;
+    if (TYPR_control [Yaw] < 89 ){
+        TYPR_PWM [Yaw] = (TYPR_control [Yaw] - 89)*30/88;
+    }
+    else{
+        if (TYPR_control [Yaw] > 89 ){
+            TYPR_PWM [Yaw] = (TYPR_control [Yaw] - 89)*30/83;
+        }
+        else{
+            TYPR_PWM [Yaw] = 0;
+        }
+    }
+    //TYPR_PWM [Yaw] =  TYPR_control [Yaw]*30/255;
+    if (TYPR_control [Pitch] < 83 ){
+        TYPR_PWM [Pitch] = (TYPR_control [Pitch] - 83)*30/83;
+    }
+    else{
+        if (TYPR_control [Pitch] > 83 ){
+            TYPR_PWM [Pitch] = (TYPR_control [Pitch]-83)*30/77;
+        }
+        else{
+            TYPR_PWM [Pitch] = 0;
+        }
+    }
+    //TYPR_PWM [Pitch] = TYPR_control [Pitch]*30/255;
+    if (TYPR_control [Roll] < 89 ){
+        TYPR_PWM [Roll] = (TYPR_control [Roll] - 89)*30/88;
+    }
+    else{
+        if (TYPR_control [Roll] > 83 ){
+            TYPR_PWM [Roll] = (TYPR_control [Roll]-89)*30/85;
+        }
+        else{
+            TYPR_PWM [Roll] = 0;
+        }
+    }
+    //TYPR_PWM [Roll] = TYPR_control [Roll]*30/255;
+    DRV_OC0_PulseWidthSet(TYPR_PWM [Throttle] + TYPR_PWM [Yaw] + TYPR_PWM [Pitch] + TYPR_PWM [Roll]);
+    DRV_OC1_PulseWidthSet(TYPR_PWM [Throttle] - TYPR_PWM [Yaw] + TYPR_PWM [Pitch] - TYPR_PWM [Roll]); 
+    DRV_OC2_PulseWidthSet(TYPR_PWM [Throttle] + TYPR_PWM [Yaw] - TYPR_PWM [Pitch] + TYPR_PWM [Roll]);
+    DRV_OC3_PulseWidthSet(TYPR_PWM [Throttle] - TYPR_PWM [Yaw] - TYPR_PWM [Pitch] - TYPR_PWM [Roll]); 
 }
