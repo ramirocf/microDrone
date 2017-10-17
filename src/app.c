@@ -28,25 +28,22 @@ bool parseValue();
 void readClient();
 void setMotors();
 
+bool initMotors();
+bool initClient();
+
+bool serverUp();
+bool clientPresent();
+
 void APP_Initialize ( void ){
-    DRV_TMR0_Start(); // Start timer 2
-    DRV_OC0_Start (); // Start motor 1 PWM
-    DRV_OC1_Start (); // Start motor 2 PWM
-    DRV_OC2_Start (); // Start motor 3 PWM
-    DRV_OC3_Start (); // Start motor 4 PWM
-    // All motors will be set with a 100% Duty Cycle
-    DRV_OC0_Width (400); 
-    DRV_OC1_Width (400);
-    DRV_OC2_Width (400); 
-    DRV_OC3_Width (400); 
+    initMotors();
     appData.state = APP_STATE_INIT;
+    appData.initInfo.initClientState = WAIT_CLIENT;
 }
 
 void APP_Tasks ( void ){
     switch ( appData.state ){
         case APP_STATE_INIT :{
-            bool appInitialized = true;
-            if (appInitialized){
+            if (initClient()){
                 appData.state = APP_STATE_READ_IMU;
             }
         }
@@ -206,4 +203,110 @@ void setMotors() {
     DRV_OC1_Width(TYPR_PWM [Yaw]); 
     DRV_OC2_Width(TYPR_PWM [Pitch]);
     DRV_OC3_Width(TYPR_PWM [Roll]); 
+}
+
+bool initMotors(){
+    bool res = true;
+    DRV_TMR0_Start(); // Start timer 2
+    DRV_OC0_Start (); // Start motor 1 PWM
+    DRV_OC1_Start (); // Start motor 2 PWM
+    DRV_OC2_Start (); // Start motor 3 PWM
+    DRV_OC3_Start (); // Start motor 4 PWM
+    // All motors will be set with a 100% Duty Cycle
+    DRV_OC0_Width (400); 
+    DRV_OC1_Width (400);
+    DRV_OC2_Width (400); 
+    DRV_OC3_Width (400); 
+    return res;
+}
+
+/*
+ * So far, it's been decided the microDrone won't fly unless there is some client 
+ * app requesting it. Even for automatic mode, client will decide when to 
+ * start operating in automatic mode.
+ */
+bool initClient(){
+    bool res = false;
+    switch (appData.initInfo.initClientState) {
+        case WAIT_SERVER:
+            if (serverUp()){
+                appData.initInfo.initClientState = WAIT_CLIENT;
+            }
+            break;
+        case WAIT_CLIENT:
+            if (clientPresent()) {
+                res = true;
+                appData.initInfo.initClientState = WAIT_SERVER;
+            }
+            break;
+        default:
+            break;
+    }
+    return res;
+}
+
+bool serverUp(){
+    bool res = false;
+    switch(appData.initInfo.serverUpState) {
+        case WAIT_START_TOKEN:{
+            if (!DRV_USART0_ReceiverBufferIsEmpty() && DRV_USART0_ReadByte() == 's'){
+                appData.initInfo.serverUpWord[0] = 's';
+                appData.initInfo.serverUpWord[SERVER_UP_LENGTH] = '\0';
+                appData.initInfo.serverUpCounter = 1;
+                appData.initInfo.serverUpState = WAIT_WORD_LENGTH;
+            }
+            break;
+        }
+        case WAIT_WORD_LENGTH: {
+            if (appData.initInfo.serverUpCounter >= SERVER_UP_LENGTH) {
+                if (strcmp(appData.initInfo.serverUpWord, "serverUp") == 0) {
+                    appData.initInfo.serverUpState = WAIT_START_TOKEN;
+                    res = true;
+                }
+            }
+            if (!DRV_USART0_ReceiverBufferIsEmpty()) {
+                int counter = appData.initInfo.serverUpCounter;
+                appData.initInfo.serverUpWord[counter] = DRV_USART0_ReadByte();
+                appData.initInfo.serverUpCounter++;
+            }
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+    return res;
+}
+
+bool clientPresent(){
+    bool res = false;
+    switch (appData.initInfo.clientUpState) {
+        case WAIT_START_TOKEN : {
+            if (!DRV_USART0_ReceiverBufferIsEmpty() && DRV_USART0_ReadByte() == 'c'){
+                appData.initInfo.clientUpWord[0] = 'c';
+                appData.initInfo.clientUpWord[CLIENT_UP_LENGTH] = '\0';
+                appData.initInfo.clientUpCounter = 1;
+                appData.initInfo.clientUpState = WAIT_WORD_LENGTH;
+            }
+            break;
+        }
+        case WAIT_WORD_LENGTH : {
+            if (appData.initInfo.clientUpCounter >= CLIENT_UP_LENGTH) {
+                if (strcmp(appData.initInfo.clientUpWord, "clientUp") == 0) {
+                    appData.initInfo.clientUpState = WAIT_START_TOKEN;
+                    res = true;
+                }
+            }
+            if (!DRV_USART0_ReceiverBufferIsEmpty()) {
+                int counter = appData.initInfo.clientUpCounter;
+                appData.initInfo.clientUpWord[counter] = DRV_USART0_ReadByte();
+                appData.initInfo.clientUpCounter++;
+            }
+            break;
+        }
+        default : {
+            break;
+        }
+    }
+    return res;
 }

@@ -111,6 +111,33 @@ typedef enum {
   GET_PITCH,
   GET_ROLL
 } READ_CLIENT_STATE;
+
+typedef enum {
+    INIT_MOTORS,
+    INIT_CLIENT
+} INIT_STATES;
+
+typedef enum {
+    WAIT_SERVER,
+    WAIT_CLIENT
+} INIT_CLIENT_STATES;
+
+typedef enum {
+    WAIT_START_TOKEN,
+    WAIT_WORD_LENGTH
+} WAIT_UP_STATES;
+
+#define SERVER_UP_LENGTH 8
+#define CLIENT_UP_LENGTH 13
+typedef struct {
+    INIT_CLIENT_STATES initClientState;
+    WAIT_UP_STATES serverUpState;
+    WAIT_UP_STATES clientUpState;
+    char serverUpWord[SERVER_UP_LENGTH + 1];
+    int  serverUpCounter;
+    char clientUpWord[CLIENT_UP_LENGTH + 1];
+    int  clientUpCounter;
+} INIT_INFO;
 // *****************************************************************************
 /* Application Data
 
@@ -130,8 +157,8 @@ typedef struct
     APP_STATES state;
     READ_IMU_STATES readIMUState;
     READ_CLIENT_STATE readClientState;
-    /* TODO: Define any additional data used by the application. */
-
+    INIT_STATES initState;
+    INIT_INFO initInfo;
 } APP_DATA;
 
 
