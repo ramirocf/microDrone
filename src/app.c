@@ -10,6 +10,7 @@
 
 static unsigned int x = 0;
 static unsigned int y = 0;
+static unsigned char c = 0;
 unsigned int TYPR_control [4] = {0, 0, 0, 0};
 unsigned int TYPR_PWM [4] = {0, 0, 0, 0};
 float TYPR_lecture [4] = {0, 0, 0, 0};
@@ -27,17 +28,17 @@ void readIMU();
 bool parseValue();
 void readClient();
 void setMotors();
+void mapAppData();
 
 bool initMotors();
 bool initClient();
 
 bool serverUp();
 bool clientPresent();
-
 void APP_Initialize ( void ){
     initMotors();
     appData.state = APP_STATE_INIT;
-    appData.initInfo.initClientState = WAIT_CLIENT;
+    appData.initInfo.initClientState = WAIT_SERVER;
 }
 
 void APP_Tasks ( void ){
@@ -54,11 +55,15 @@ void APP_Tasks ( void ){
             appData.state = APP_STATE_READ_WIFI;
             break;
         
-        case APP_STATE_READ_WIFI :
+        case APP_STATE_READ_WIFI : {
             readClient();
             appData.state = APP_STATE_MODULE_PWM;
             break;
-        
+        }
+        case APP_STATE_MAP_APP_DATA:{
+            mapAppData();
+            break;
+        }
         case APP_STATE_MODULE_PWM:{
             setMotors();
             appData.state = APP_STATE_READ_IMU;
@@ -88,6 +93,7 @@ void readIMU() {
                 readCode = DRV_USART1_ReadByte();
                 if (readCode == '=') {
                     appData.readIMUState = PARSE_VALUE;
+                    DRV_USART0_WriteByte(readCode);
                 }
             }
             break;
@@ -195,14 +201,21 @@ void readClient() {
 }
 
 void setMotors() {
-    TYPR_PWM [Throttle] = TYPR_control [Throttle]*400/255;
-    TYPR_PWM [Yaw] = TYPR_control [Yaw]*400/255; 
-    TYPR_PWM [Pitch] = TYPR_control [Pitch]*400/255;
-    TYPR_PWM [Roll] = TYPR_control [Roll]*400/255;
-    DRV_OC0_Width(TYPR_PWM [Throttle]);
-    DRV_OC1_Width(TYPR_PWM [Yaw]); 
-    DRV_OC2_Width(TYPR_PWM [Pitch]);
-    DRV_OC3_Width(TYPR_PWM [Roll]); 
+    DRV_OC0_Width(TYPR_control[Throttle]);
+    DRV_OC1_Width(TYPR_control[Yaw]); 
+    DRV_OC2_Width(TYPR_control[Pitch]);
+    DRV_OC3_Width(TYPR_control[Roll]); 
+    DRV_OC0_Width(TYPR_control[Throttle]);
+}
+
+void mapAppData() {
+    /*The person in charge of writing the equation to map values coming 
+     from the app to PWM values gotta write them code here. As far as I 
+     understand this is just a dummy code lol*/
+    TYPR_PWM[Throttle] = TYPR_control[Throttle]*400/255;
+    TYPR_PWM[Yaw] = TYPR_control[Yaw]*400/255; 
+    TYPR_PWM[Pitch] = TYPR_control[Pitch]*400/255;
+    TYPR_PWM[Roll] = TYPR_control[Roll]*400/255;
 }
 
 bool initMotors(){
@@ -228,6 +241,24 @@ bool initMotors(){
 bool initClient(){
     bool res = false;
     switch (appData.initInfo.initClientState) {
+        case WAIT_SERVER: {
+            if (DRV_USART0_ReceiverBufferIsEmpty()) {
+                res = true;
+                appData.initInfo.initClientState = WAIT_CLIENT;
+            }
+            else {
+                DRV_USART0_ReadByte();
+            }
+            break;
+        }
+        case WAIT_CLIENT: {
+            res = true;
+            break;
+        }
+    }
+    return res;
+/*    bool res = false;
+    switch (appData.initInfo.initClientState) {
         case WAIT_SERVER:
             if (serverUp()){
                 appData.initInfo.initClientState = WAIT_CLIENT;
@@ -243,6 +274,7 @@ bool initClient(){
             break;
     }
     return res;
+ */ 
 }
 
 bool serverUp(){
@@ -261,6 +293,10 @@ bool serverUp(){
             if (appData.initInfo.serverUpCounter >= SERVER_UP_LENGTH) {
                 if (strcmp(appData.initInfo.serverUpWord, "serverUp") == 0) {
                     appData.initInfo.serverUpState = WAIT_START_TOKEN;
+                    int i;
+                    for (i = 0; i < 2; i++){
+                        DRV_USART0_WriteByte('a');
+                    }
                     res = true;
                 }
             }
@@ -282,6 +318,14 @@ bool clientPresent(){
     bool res = false;
     switch (appData.initInfo.clientUpState) {
         case WAIT_START_TOKEN : {
+            /*if (!DRV_USART0_ReceiverBufferIsEmpty()){
+                c = DRV_USART0_ReadByte();
+                if (c == 'c'){
+                    (void)c;
+                }
+                break;
+            }*/
+            //DRV_USART0_WriteByte('t');
             if (!DRV_USART0_ReceiverBufferIsEmpty() && DRV_USART0_ReadByte() == 'c'){
                 appData.initInfo.clientUpWord[0] = 'c';
                 appData.initInfo.clientUpWord[CLIENT_UP_LENGTH] = '\0';

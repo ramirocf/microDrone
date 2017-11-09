@@ -92,6 +92,7 @@ typedef enum
     APP_STATE_ENABLE_PILOT,
     APP_STATE_READ_IMU,
     APP_STATE_READ_WIFI,
+    APP_STATE_MAP_APP_DATA,
     APP_STATE_MODULE_PWM,
 
   /* TODO: Define states used by the application state machine. */
