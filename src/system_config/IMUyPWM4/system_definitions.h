@@ -100,6 +100,7 @@ typedef struct
     SYS_MODULE_OBJ  drvTmr0;
     SYS_MODULE_OBJ  drvUsart0;
     SYS_MODULE_OBJ  drvUsart1;
+    SYS_MODULE_OBJ  drvUsart2;
 
 } SYSTEM_OBJECTS;
 

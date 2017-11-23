@@ -71,6 +71,11 @@ SYS_MODULE_OBJ DRV_USART_Initialize(const SYS_MODULE_INDEX index,const SYS_MODUL
             returnValue = DRV_USART1_Initialize();
             break;
         }
+        case DRV_USART_INDEX_2:
+        {
+            returnValue = DRV_USART2_Initialize();
+            break;
+        }
         default:
         {
             returnValue = SYS_MODULE_OBJ_INVALID;
@@ -94,6 +99,11 @@ void DRV_USART_Deinitialize( SYS_MODULE_OBJ object)
             DRV_USART1_Deinitialize();
             break;
         }
+        case DRV_USART_INDEX_2:
+        {
+            DRV_USART2_Deinitialize();
+            break;
+        }
         default:
         {
             break;
@@ -115,6 +125,11 @@ SYS_STATUS DRV_USART_Status( SYS_MODULE_OBJ object)
         case DRV_USART_INDEX_1:
         {
             returnValue = DRV_USART1_Status();
+            break;
+        }
+        case DRV_USART_INDEX_2:
+        {
+            returnValue = DRV_USART2_Status();
             break;
         }
         default:
@@ -165,6 +180,11 @@ DRV_HANDLE DRV_USART_Open( const SYS_MODULE_INDEX index, const DRV_IO_INTENT ioI
             returnValue = DRV_USART1_Open(index,ioIntent);
             break;
         }
+        case DRV_USART_INDEX_2:
+        {
+            returnValue = DRV_USART2_Open(index,ioIntent);
+            break;
+        }
         default:
         {
             returnValue = DRV_HANDLE_INVALID;
@@ -190,6 +210,11 @@ void DRV_USART_Close( const DRV_HANDLE handle)
         case DRV_USART_INDEX_1:
         {
             DRV_USART1_Close();
+            break;
+        }
+        case DRV_USART_INDEX_2:
+        {
+            DRV_USART2_Close();
             break;
         }
         default:
@@ -218,6 +243,11 @@ DRV_USART_CLIENT_STATUS DRV_USART_ClientStatus ( DRV_HANDLE handle )
             returnValue = DRV_USART1_ClientStatus();
             break;
         }
+        case DRV_USART_INDEX_2:
+        {
+            returnValue = DRV_USART2_ClientStatus();
+            break;
+        }
         default:
         {
             returnValue = DRV_CLIENT_STATUS_ERROR;
@@ -244,6 +274,11 @@ DRV_USART_TRANSFER_STATUS DRV_USART_TransferStatus( const DRV_HANDLE handle )
         case DRV_USART_INDEX_1:
         {
             returnValue = DRV_USART1_TransferStatus();
+            break;
+        }
+        case DRV_USART_INDEX_2:
+        {
+            returnValue = DRV_USART2_TransferStatus();
             break;
         }
         default:
@@ -277,6 +312,11 @@ uint8_t DRV_USART_ReadByte( const DRV_HANDLE handle )
             returnValue = DRV_USART1_ReadByte();
             break;
         }
+        case DRV_USART_INDEX_2:
+        {
+            returnValue = DRV_USART2_ReadByte();
+            break;
+        }
         default:
         {
             SYS_ASSERT(false, "Incorrect Driver Handle");
@@ -305,6 +345,11 @@ void DRV_USART_WriteByte( const DRV_HANDLE handle, const uint8_t byte)
             DRV_USART1_WriteByte(byte);
             break;
         }
+        case DRV_USART_INDEX_2:
+        {
+            DRV_USART2_WriteByte(byte);
+            break;
+        }
         default:
         {
             break;
@@ -329,6 +374,11 @@ unsigned int DRV_USART_ReceiverBufferSizeGet( const DRV_HANDLE handle )
         case DRV_USART_INDEX_1:
         {
             returnValue = DRV_USART1_ReceiverBufferSizeGet();
+            break;
+        }
+        case DRV_USART_INDEX_2:
+        {
+            returnValue = DRV_USART2_ReceiverBufferSizeGet();
             break;
         }
         default:
@@ -359,6 +409,11 @@ unsigned int DRV_USART_TransmitBufferSizeGet( const DRV_HANDLE handle )
             returnValue = DRV_USART1_TransmitBufferSizeGet();
             break;
         }
+        case DRV_USART_INDEX_2:
+        {
+            returnValue = DRV_USART2_TransmitBufferSizeGet();
+            break;
+        }
         default:
         {
             returnValue = (unsigned int)NULL;
@@ -385,6 +440,11 @@ bool DRV_USART_ReceiverBufferIsEmpty( const DRV_HANDLE handle )
         case DRV_USART_INDEX_1:
         {
             returnValue = DRV_USART1_ReceiverBufferIsEmpty();
+            break;
+        }
+        case DRV_USART_INDEX_2:
+        {
+            returnValue = DRV_USART2_ReceiverBufferIsEmpty();
             break;
         }
         default:
@@ -415,6 +475,11 @@ bool DRV_USART_TransmitBufferIsFull( const DRV_HANDLE handle )
             returnValue = DRV_USART1_TransmitBufferIsFull();
             break;
         }
+        case DRV_USART_INDEX_2:
+        {
+            returnValue = DRV_USART2_TransmitBufferIsFull();
+            break;
+        }
         default:
         {
             returnValue = false;
@@ -443,6 +508,11 @@ DRV_USART_BAUD_SET_RESULT DRV_USART_BaudSet(const DRV_HANDLE handle, uint32_t ba
             returnValue = DRV_USART1_BaudSet(baud);
             break;
         }
+        case DRV_USART_INDEX_2:
+        {
+            returnValue = DRV_USART2_BaudSet(baud);
+            break;
+        }
         default:
         {
             returnValue = DRV_USART_BAUD_SET_ERROR;
@@ -469,6 +539,11 @@ DRV_USART_LINE_CONTROL_SET_RESULT DRV_USART_LineControlSet(const DRV_HANDLE hand
         case DRV_USART_INDEX_1:
         {
             returnValue = DRV_USART1_LineControlSet(lineControl);
+            break;
+        }
+        case DRV_USART_INDEX_2:
+        {
+            returnValue = DRV_USART2_LineControlSet(lineControl);
             break;
         }
         default:
