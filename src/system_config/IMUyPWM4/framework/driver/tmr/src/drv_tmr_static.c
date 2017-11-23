@@ -157,7 +157,7 @@ void DRV_TMR0_Initialize(void)
     /* Clear counter */ 
     PLIB_TMR_Counter16BitClear(TMR_ID_2);
     /*Set period */ 
-    PLIB_TMR_Period16BitSet(TMR_ID_2, 400);
+    PLIB_TMR_Period16BitSet(TMR_ID_2, 624);
 }
 
 static void _DRV_TMR0_Resume(bool resume)

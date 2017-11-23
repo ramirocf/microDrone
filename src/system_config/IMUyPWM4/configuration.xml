@@ -133,7 +133,7 @@
       <Template>
         <Name>drv_oc_static.c</Name>
         <Path>Source Files/app/system_config/IMUyPWM4/framework/driver/oc/src</Path>
-        <Checksum>10EBA55D5032D437C9C8BF046D6C0AA6</Checksum>
+        <Checksum>A86A4108ED753E7EC4C452509DAE2904</Checksum>
         <ProjectFileChecksum>A9B456D4ADD03296E1AF5C2040EF5B31</ProjectFileChecksum>
       </Template>
       <Template>
@@ -158,7 +158,7 @@
       <Template>
         <Name>drv_tmr_static.c</Name>
         <Path>Source Files/app/system_config/IMUyPWM4/framework/driver/tmr/src</Path>
-        <Checksum>001233BBC8E98D2F96E70C0B94FFED9F</Checksum>
+        <Checksum>71122658102A750CCBA5B2A1BBEB86B9</Checksum>
       </Template>
       <Template>
         <Name>system_interrupt.c</Name>
@@ -226,7 +226,7 @@
       <Template>
         <Name>sys_ports_static.c</Name>
         <Path>Source Files/app/system_config/IMUyPWM4/framework/system/ports/src</Path>
-        <Checksum>587BE496D2C96B52F53AC7DD0ADA6889</Checksum>
+        <Checksum>FEC5C2016A8E2A5109D638C9BCD69C35</Checksum>
       </Template>
       <Template>
         <Name>drv_oc_static.h</Name>

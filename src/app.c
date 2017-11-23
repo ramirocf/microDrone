@@ -2,17 +2,14 @@
 #include <stdint.h> 
 #include <stdlib.h>
 #include <stdio.h>
-
-#define Throttle 0
-#define Yaw 1
-#define Pitch 2
-#define Roll 3
+#include "utilities.h"
 
 static unsigned int x = 0;
 static unsigned int y = 0;
 static unsigned char c = 0;
-unsigned int TYPR_control [4] = {0, 0, 0, 0};
-unsigned int TYPR_PWM [4] = {0, 0, 0, 0};
+unsigned short motors[4];
+unsigned int TYPR_control [4] = {0, YAW_MID_VAL, PITCH_MID_VAL, ROLL_MID_VAL};
+int TYPR_PWM [4] = {0, 0, 0, 0};
 float TYPR_lecture [4] = {0, 0, 0, 0};
 float TYPR_target [4] = {0, 0, 0, 0};
 unsigned char IMUYPR[3][8]={{'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'}, 
@@ -35,6 +32,8 @@ bool initClient();
 
 bool serverUp();
 bool clientPresent();
+
+float scaleValue(int unscaledVal, int middle, int numValuesLeft, int numValuesRight);
 void APP_Initialize ( void ){
     initMotors();
     appData.state = APP_STATE_INIT;
@@ -57,11 +56,12 @@ void APP_Tasks ( void ){
         
         case APP_STATE_READ_WIFI : {
             readClient();
-            appData.state = APP_STATE_MODULE_PWM;
+            appData.state = APP_STATE_MAP_APP_DATA;
             break;
         }
         case APP_STATE_MAP_APP_DATA:{
             mapAppData();
+            appData.state = APP_STATE_MODULE_PWM;
             break;
         }
         case APP_STATE_MODULE_PWM:{
@@ -80,14 +80,12 @@ void APP_Tasks ( void ){
 void readIMU() {
     char readCode;
     switch (appData.readIMUState) {
-        case WAIT_IMU_TX_START : 
-            if (DRV_USART1_ReceiverBufferIsEmpty()) {
-                //DRV_USART0_WriteByte('Y');
-            }
-            else {
-                appData.readIMUState = WAIT_EQUAL;
+        case WAIT_IMU_TX_START : {
+            if (!DRV_USART1_ReceiverBufferIsEmpty()) {
+              appData.readIMUState = WAIT_EQUAL;
             }
             break;
+        }
         case WAIT_EQUAL:
             if (!DRV_USART1_ReceiverBufferIsEmpty()) {
                 readCode = DRV_USART1_ReadByte();
@@ -141,21 +139,44 @@ void sendClientData(){
     DRV_USART0_WriteByte('R');
     DRV_USART0_WriteByte('=');
     int i,j;
-    for (i = 0; i < 3; i++){
+    for (i = 0; i < 4; i++){
         itoa(val[i],TYPR_control[i],10);
         for (j = 0; j < 3 && val[i][j] != '\0'; j++){
             DRV_USART0_WriteByte(val[i][j]);
         }
-        if (i < 2){
+        if (i < 3){
             DRV_USART0_WriteByte(',');
         }
     }
     DRV_USART0_WriteByte('\n');
 }
 
+void printMotorsPwm() {
+    int i;
+    Serial0Print("Motors PWM:  ");
+    for (i = 0; i < 4; i++){
+        Serial0PrintInt(motors[i]);
+        if (i < 3)
+            Serial0Print(", ");
+    }
+    Serial0Print("\n");
+}
+
+void printMappedData() {
+    Serial0Print("Mapped Throttle: ");
+    Serial0PrintInt(TYPR_PWM[Throttle]);
+    Serial0Print("\nMapped Yaw: ");
+    Serial0PrintInt(TYPR_PWM[Yaw]);
+    Serial0Print("\nMapped Pitch: ");
+    Serial0PrintInt(TYPR_PWM[Pitch]);
+    Serial0Print("\nMapped Roll: ");
+    Serial0PrintInt(TYPR_PWM[Roll]);
+    Serial0Print("\n");
+}
+
 /*
     This FSM expects an string in a format like this:
-    "\n(valor de Throttle)(valor de Yaw)(valor de Pitch)(valor de Roll)"
+    "(*)=(valor de Throttle)(valor de Yaw)(valor de Pitch)(valor de Roll)"
 */
 void readClient() {
     char receiveCode;
@@ -163,7 +184,7 @@ void readClient() {
         case WAIT_CLIENT_TX_START:
             if (!DRV_USART0_ReceiverBufferIsEmpty()) {
                 receiveCode = DRV_USART0_ReadByte();
-                if (receiveCode == '\n'){
+                if (receiveCode == '='){
                     appData.readClientState = GET_THROTTLE;
                 }
             }
@@ -192,6 +213,15 @@ void readClient() {
                 appData.readClientState = WAIT_CLIENT_TX_START;
                 // Just for debugging
                 //sendClientData();
+                //printMappedData();
+                //printMotorsPwm();
+                // After the ESP8266 module finishes initialization for some 
+                // reason is sending some data that is enabling this FSM. 
+                // In a future release is expected to correct his problem in 
+                // a formal way. For now, I will set a counter to ignore the first
+                // 10 values. The comparison to determine if the samples should 
+                // be ignored is done in setMotors() function.
+                c++;
             }
             break;
         default :
@@ -201,22 +231,32 @@ void readClient() {
 }
 
 void setMotors() {
-    DRV_OC0_Width(TYPR_control[Throttle]);
-    DRV_OC1_Width(TYPR_control[Yaw]); 
-    DRV_OC2_Width(TYPR_control[Pitch]);
-    DRV_OC3_Width(TYPR_control[Roll]); 
-    DRV_OC0_Width(TYPR_control[Throttle]);
+    // In a future release this part should dissapear. Check read client FSM 
+    // to know about more details in this part.
+    if (c < 10){
+        DRV_OC0_Width(0);
+        DRV_OC1_Width(0); 
+        DRV_OC2_Width(0);
+        DRV_OC3_Width(0);
+        return;
+    }
+    c = 100;
+    motors[0] = TYPR_PWM [Throttle] + TYPR_PWM [Yaw] + TYPR_PWM [Pitch] + TYPR_PWM [Roll];
+    motors[1] = TYPR_PWM [Throttle] - TYPR_PWM [Yaw] + TYPR_PWM [Pitch] - TYPR_PWM [Roll];
+    motors[2] = TYPR_PWM [Throttle] + TYPR_PWM [Yaw] - TYPR_PWM [Pitch] + TYPR_PWM [Roll];
+    motors[3] = TYPR_PWM [Throttle] - TYPR_PWM [Yaw] - TYPR_PWM [Pitch] - TYPR_PWM [Roll];
+    DRV_OC0_Width(motors[3] + 12);
+    DRV_OC1_Width(motors[2] + 12); 
+    DRV_OC2_Width((motors[0] - 12) > 0 ? motors[0] - 12 : motors[0]);
+    DRV_OC3_Width((motors[1] - 12) > 0 ? motors[1] - 12 : motors[1]);
 }
 
 void mapAppData() {
-    /*The person in charge of writing the equation to map values coming 
-     from the app to PWM values gotta write them code here. As far as I 
-     understand this is just a dummy code lol*/
-    TYPR_PWM[Throttle] = TYPR_control[Throttle]*400/255;
-    TYPR_PWM[Yaw] = TYPR_control[Yaw]*400/255; 
-    TYPR_PWM[Pitch] = TYPR_control[Pitch]*400/255;
-    TYPR_PWM[Roll] = TYPR_control[Roll]*400/255;
-}
+     TYPR_PWM [Throttle] = THROTTLE_PROPORTION * scaleValue(TYPR_control[Throttle]-3, 0, 1, MAX_THROTTLE);
+     TYPR_PWM[Yaw] = YAW_PROPORTION * scaleValue(TYPR_control[Yaw], YAW_MID_VAL, YAW_NUM_VALS_LEFT, YAW_NUM_VALS_RIGHT);
+     TYPR_PWM[Pitch] = PITCH_PROPORTION * scaleValue(TYPR_control[Pitch], PITCH_MID_VAL, PITCH_NUM_VALS_LEFT, PITCH_NUM_VALS_RIGHT);
+     TYPR_PWM[Roll] = ROLL_PROPORTION * scaleValue(TYPR_control[Roll], ROLL_MID_VAL, ROLL_NUM_VALS_LEFT, ROLL_NUM_VALS_RIGHT);
+ }
 
 bool initMotors(){
     bool res = true;
@@ -225,11 +265,11 @@ bool initMotors(){
     DRV_OC1_Start (); // Start motor 2 PWM
     DRV_OC2_Start (); // Start motor 3 PWM
     DRV_OC3_Start (); // Start motor 4 PWM
-    // All motors will be set with a 100% Duty Cycle
-    DRV_OC0_Width (400); 
-    DRV_OC1_Width (400);
-    DRV_OC2_Width (400); 
-    DRV_OC3_Width (400); 
+    // Motors should always being off
+    DRV_OC0_Width (0); 
+    DRV_OC1_Width (0);
+    DRV_OC2_Width (0); 
+    DRV_OC3_Width (0); 
     return res;
 }
 
@@ -257,100 +297,15 @@ bool initClient(){
         }
     }
     return res;
-/*    bool res = false;
-    switch (appData.initInfo.initClientState) {
-        case WAIT_SERVER:
-            if (serverUp()){
-                appData.initInfo.initClientState = WAIT_CLIENT;
-            }
-            break;
-        case WAIT_CLIENT:
-            if (clientPresent()) {
-                res = true;
-                appData.initInfo.initClientState = WAIT_SERVER;
-            }
-            break;
-        default:
-            break;
-    }
-    return res;
- */ 
 }
 
-bool serverUp(){
-    bool res = false;
-    switch(appData.initInfo.serverUpState) {
-        case WAIT_START_TOKEN:{
-            if (!DRV_USART0_ReceiverBufferIsEmpty() && DRV_USART0_ReadByte() == 's'){
-                appData.initInfo.serverUpWord[0] = 's';
-                appData.initInfo.serverUpWord[SERVER_UP_LENGTH] = '\0';
-                appData.initInfo.serverUpCounter = 1;
-                appData.initInfo.serverUpState = WAIT_WORD_LENGTH;
-            }
-            break;
-        }
-        case WAIT_WORD_LENGTH: {
-            if (appData.initInfo.serverUpCounter >= SERVER_UP_LENGTH) {
-                if (strcmp(appData.initInfo.serverUpWord, "serverUp") == 0) {
-                    appData.initInfo.serverUpState = WAIT_START_TOKEN;
-                    int i;
-                    for (i = 0; i < 2; i++){
-                        DRV_USART0_WriteByte('a');
-                    }
-                    res = true;
-                }
-            }
-            if (!DRV_USART0_ReceiverBufferIsEmpty()) {
-                int counter = appData.initInfo.serverUpCounter;
-                appData.initInfo.serverUpWord[counter] = DRV_USART0_ReadByte();
-                appData.initInfo.serverUpCounter++;
-            }
-            break;
-        }
-        default: {
-            break;
-        }
+float scaleValue(int unscaledVal, int middle, int numValuesLeft, int numValuesRight) {
+    float res = 0;
+     if (unscaledVal < middle ){
+       res = (float)(unscaledVal - middle) / numValuesLeft;
     }
-    return res;
-}
-
-bool clientPresent(){
-    bool res = false;
-    switch (appData.initInfo.clientUpState) {
-        case WAIT_START_TOKEN : {
-            /*if (!DRV_USART0_ReceiverBufferIsEmpty()){
-                c = DRV_USART0_ReadByte();
-                if (c == 'c'){
-                    (void)c;
-                }
-                break;
-            }*/
-            //DRV_USART0_WriteByte('t');
-            if (!DRV_USART0_ReceiverBufferIsEmpty() && DRV_USART0_ReadByte() == 'c'){
-                appData.initInfo.clientUpWord[0] = 'c';
-                appData.initInfo.clientUpWord[CLIENT_UP_LENGTH] = '\0';
-                appData.initInfo.clientUpCounter = 1;
-                appData.initInfo.clientUpState = WAIT_WORD_LENGTH;
-            }
-            break;
-        }
-        case WAIT_WORD_LENGTH : {
-            if (appData.initInfo.clientUpCounter >= CLIENT_UP_LENGTH) {
-                if (strcmp(appData.initInfo.clientUpWord, "clientUp") == 0) {
-                    appData.initInfo.clientUpState = WAIT_START_TOKEN;
-                    res = true;
-                }
-            }
-            if (!DRV_USART0_ReceiverBufferIsEmpty()) {
-                int counter = appData.initInfo.clientUpCounter;
-                appData.initInfo.clientUpWord[counter] = DRV_USART0_ReadByte();
-                appData.initInfo.clientUpCounter++;
-            }
-            break;
-        }
-        default : {
-            break;
-        }
-    }
+     else if (unscaledVal > middle ){
+       res = (float)(unscaledVal - middle) / numValuesRight;
+    }   
     return res;
 }
